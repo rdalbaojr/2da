@@ -2,6 +2,10 @@ from fastapi import FastAPI, Depends
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import declarative_base, sessionmaker, Session
 from pydantic import BaseModel
+from fastapi import FastAPI, Depends
+from fastapi.staticfiles import StaticFiles
+from sqlalchemy import create_engine, Column, Integer, String
+# ... rest of your imports ...
 
 # 1. Database Setup
 DATABASE_URL = "sqlite:///./2da.db"
@@ -29,13 +33,8 @@ class RideRequestCreate(BaseModel):
 Base.metadata.create_all(bind=engine)
 app = FastAPI(title="2DA Tricycle Ride-Hailing API")
 
-# Dependency to open and close the database connection
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+# NEW: Tell FastAPI to serve your HTML files from the current directory
+app.mount("/web", StaticFiles(directory=".", html=True), name="web")
 
 # 5. API Endpoints
 @app.get("/")
