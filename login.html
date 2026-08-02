@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>2DA - Login</title>
+</head>
+<body style="font-family: Arial, sans-serif; text-align: center; margin-top: 50px;">
+
+    <h2>Welcome to 2DA</h2>
+    <p>Please login to book a ride</p>
+
+    <!-- The Login Form -->
+    <form action="/login" method="POST" style="margin-bottom: 20px;">
+        <div>
+            <label>Username:</label><br>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <br>
+        <div>
+            <label>Password:</label><br>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <br>
+        <button type="submit">Login</button>
+    </form>
+
+    <hr style="width: 300px;">
+
+    <!-- The Registration Link -->
+    <div style="margin-top: 15px;">
+        <p>Don't have an account yet? <br> 
+        <a href="register.html">Click here to register</a></p>
+    </div>
+
+</body>
+</html>
