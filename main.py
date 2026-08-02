@@ -40,6 +40,13 @@ app.mount("/web", StaticFiles(directory=".", html=True), name="web")
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the 2DA API. The database is active!"}
+# Dependency to get the database session
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 # NEW: Endpoint to create a ride request
 @app.post("/request-ride/")
