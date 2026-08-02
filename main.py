@@ -6,10 +6,7 @@ from fastapi import FastAPI, Depends
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy import create_engine, Column, Integer, String
 from fastapi.responses import RedirectResponse
-import registration
 
-# If you used an APIRouter in registration.py:
-app.include_router(registration.router)
 # ... rest of your imports ...
 
 # 1. Database Setup
