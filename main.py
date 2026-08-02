@@ -6,6 +6,13 @@ from fastapi import FastAPI, Depends
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy import create_engine, Column, Integer, String
 from fastapi.responses import RedirectResponse
+from fastapi import FastAPI
+
+
+app = FastAPI()
+
+# This mounts your current directory so HTML files can be accessed via browser
+app.mount("/", StaticFiles(directory=".", html=True), name="static")
 
 # ... rest of your imports ...
 
