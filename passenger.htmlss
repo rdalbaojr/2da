@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-950">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vybes — Registration Portal</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Font: Plus Jakarta Sans -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card {
+      background: rgba(15, 23, 42, 0.80);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    }
+  </style>
+</head>
+<body class="min-h-full text-slate-100 antialiased flex flex-col justify-center items-center py-10 px-4 relative bg-slate-950">
+
+  <!-- Main Container -->
+  <div class="w-full max-w-xl glass-card rounded-3xl p-6 sm:p-8 relative z-10">
+    
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-tr from-blue-600 to-cyan-400 rounded-2xl mb-3 shadow-lg shadow-blue-500/30">
+        <i class="fa-solid fa-motorcycle text-2xl text-white"></i>
+      </div>
+      <h1 class="text-3xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400">
+        Vybes Registration
+      </h1>
+      <p class="text-xs font-semibold uppercase tracking-widest text-blue-400 mt-1">Hyper-Local Community Platform</p>
+    </div>
+
+    <!-- Role Switcher -->
+    <div class="grid grid-cols-2 p-1.5 bg-slate-900/90 rounded-2xl border border-slate-800 mb-8">
+      <button id="btn-passenger" onclick="switchRole('passenger')" type="button" class="py-3 text-sm font-semibold rounded-xl transition-all duration-300 bg-blue-600 text-white shadow-md shadow-blue-600/30">
+        <i class="fa-solid fa-user mr-2"></i>Passenger
+      </button>
+      <button id="btn-driver" onclick="switchRole('driver')" type="button" class="py-3 text-sm font-semibold rounded-xl text-slate-400 hover:text-white transition-all duration-300">
+        <i class="fa-solid fa-id-card mr-2"></i>Tricycle Driver
+      </button>
+    </div>
+
+    <!-- Alert Box for Response Feedback -->
+    <div id="alert-box" class="hidden mb-6 p-4 rounded-xl text-sm font-medium border"></div>
+
+    <!-- ==================== 1. PASSENGER REGISTRATION FORM ==================== -->
+    <form id="form-passenger" class="space-y-5" onsubmit="submitForm(event, 'passenger')">
+      <div>
+        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Full Name *</label>
+        <input type="text" id="passenger-name" required placeholder="e.g., Juan Dela Cruz" 
+               class="w-full bg-slate-900/90 border border-slate-800 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Sign-In Account Type *</label>
+        <div class="grid grid-cols-2 gap-3 mb-3">
+          <label class="flex items-center justify-center p-3 border border-slate-800 rounded-xl cursor-pointer bg-slate-900/50 hover:border-slate-700">
+            <input type="radio" name="passenger-auth" value="mobile" checked onclick="togglePassengerAuth('mobile')" class="accent-blue-500 mr-2">
+            <span class="text-xs font-medium"><i class="fa-solid fa-mobile-screen text-blue-400 mr-1.5"></i> Mobile / WhatsApp</span>
+          </label>
+          <label class="flex items-center justify-center p-3 border border-slate-800 rounded-xl cursor-pointer bg-slate-900/50 hover:border-slate-700">
+            <input type="radio" name="passenger-auth" value="facebook" onclick="togglePassengerAuth('facebook')" class="accent-blue-500 mr-2">
+            <span class="text-xs font-medium"><i class="fa-brands fa-facebook text-blue-500 mr-1.5"></i> Facebook</span>
+          </label>
+        </div>
+        <input type="text" id="passenger-contact" required placeholder="09171234567" 
+               class="w-full bg-slate-900/90 border border-slate-800 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-blue-500 transition-all">
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Home Barangay / Community</label>
+        <input type="text" id="passenger-barangay" placeholder="e.g., Brgy. San Antonio, Pasig City" 
+               class="w-full bg-slate-900/90 border border-slate-800 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-blue-500 transition-all">
+      </div>
+
+      <button type="submit" class="w-full py-4 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-bold rounded-xl shadow-lg shadow-blue-500/25 transition-all duration-300">
+        Register Passenger Account <i class="fa-solid fa-arrow-right ml-2"></i>
+      </button>
+    </form>
+
+    <!-- ==================== 2. DRIVER REGISTRATION FORM ==================== -->
+    <form id="form-driver" class="space-y-5 hidden" onsubmit="submitForm(event, 'driver')">
+      <div>
+        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Full Name (On License) *</label>
+        <input type="text" id="driver-name" required placeholder="e.g., Pedro Penduko" 
+               class="w-full bg-slate-900/90 border border-slate-800 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-emerald-500 transition-all">
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Mobile / WhatsApp Number *</label>
+        <input type="text" id="driver-mobile" required placeholder="09181234567" 
+               class="w-full bg-slate-900/90 border border-slate-800 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-emerald-500 transition-all">
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Driver's License No. *</label>
+          <input type="text" id="driver-license" required placeholder="A01-23-456789" 
+                 class="w-full bg-slate-900/90 border border-slate-800 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-emerald-500 transition-all">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">TODA Body / Plate No. *</label>
+          <input type="text" id="driver-plate" required placeholder="042 / 123-ABC" 
+                 class="w-full bg-slate-900/90 border border-slate-800 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-emerald-500 transition-all">
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">TODA Association Name *</label>
+        <input type="text" id="driver-toda" required placeholder="e.g., SANTODA Pasig" 
+               class="w-full bg-slate-900/90 border border-slate-800 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-emerald-500 transition-all">
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">QRPh Payout Wallet *</label>
+        <div class="grid grid-cols-2 gap-3">
+          <select id="driver-payout-provider" class="bg-slate-900/90 border border-slate-800 rounded-xl px-3 py-3.5 text-sm focus:outline-none focus:border-emerald-500">
+            <option value="GCash">GCash</option>
+            <option value="Maya">Maya</option>
+          </select>
+          <input type="text" id="driver-payout-account" required placeholder="09181234567" 
+                 class="bg-slate-900/90 border border-slate-800 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-emerald-500 transition-all">
+        </div>
+      </div>
+
+      <button type="submit" class="w-full py-4 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold rounded-xl shadow-lg shadow-emerald-500/25 transition-all duration-300">
+        Submit Driver Credentials <i class="fa-solid fa-shield-check ml-2"></i>
+      </button>
+    </form>
+
+  </div>
+
+  <!-- Client-side Logic -->
+  <script>
+    function switchRole(role) {
+      const btnPassenger = document.getElementById('btn-passenger');
+      const btnDriver = document.getElementById('btn-driver');
+      const formPassenger = document.getElementById('form-passenger');
+      const formDriver = document.getElementById('form-driver');
+      const alertBox = document.getElementById('alert-box');
+
+      alertBox.classList.add('hidden');
+
+      if (role === 'passenger') {
+        btnPassenger.className = "py-3 text-sm font-semibold rounded-xl transition-all duration-300 bg-blue-600 text-white shadow-md shadow-blue-600/30";
+        btnDriver.className = "py-3 text-sm font-semibold rounded-xl text-slate-400 hover:text-white transition-all duration-300";
+        formPassenger.classList.remove('hidden');
+        formDriver.classList.add('hidden');
+      } else {
+        btnDriver.className = "py-3 text-sm font-semibold rounded-xl transition-all duration-300 bg-emerald-600 text-white shadow-md shadow-emerald-600/30";
+        btnPassenger.className = "py-3 text-sm font-semibold rounded-xl text-slate-400 hover:text-white transition-all duration-300";
+        formDriver.classList.remove('hidden');
+        formPassenger.classList.add('hidden');
+      }
+    }
+
+    function togglePassengerAuth(type) {
+      const input = document.getElementById('passenger-contact');
+      input.placeholder = type === 'mobile' ? '09171234567' : 'https://facebook.com/your.profile';
+    }
+
+    async function submitForm(event, role) {
+      event.preventDefault();
+      const alertBox = document.getElementById('alert-box');
+      alertBox.classList.add('hidden');
+
+      const isPassenger = role === 'passenger';
+      const endpoint = isPassenger ? '/api/v1/register/passenger' : '/api/v1/register/driver';
+
+      const payload = isPassenger ? {
+        full_name: document.getElementById('passenger-name').value,
+        auth_type: document.querySelector('input[name="passenger-auth"]:checked').value,
+        contact_info: document.getElementById('passenger-contact').value,
+        barangay: document.getElementById('passenger-barangay').value
+      } : {
+        full_name: document.getElementById('driver-name').value,
+        mobile_number: document.getElementById('driver-mobile').value,
+        license_no: document.getElementById('driver-license').value,
+        body_no: document.getElementById('driver-plate').value,
+        toda_name: document.getElementById('driver-toda').value,
+        payout_provider: document.getElementById('driver-payout-provider').value,
+        payout_account: document.getElementById('driver-payout-account').value
+      };
+
+      try {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          alertBox.className = "mb-6 p-4 rounded-xl text-sm font-medium bg-emerald-500/10 border-emerald-500/30 text-emerald-400 border";
+          alertBox.innerText = "✅ " + data.message;
+          if (isPassenger) document.getElementById('form-passenger').reset();
+          else document.getElementById('form-driver').reset();
+        } else {
+          alertBox.className = "mb-6 p-4 rounded-xl text-sm font-medium bg-rose-500/10 border-rose-500/30 text-rose-400 border";
+          alertBox.innerText = "❌ " + (data.detail || "Registration failed. Please check inputs.");
+        }
+      } catch (err) {
+        alertBox.className = "mb-6 p-4 rounded-xl text-sm font-medium bg-rose-500/10 border-rose-500/30 text-rose-400 border";
+        alertBox.innerText = "❌ Unable to connect to backend server.";
+      }
+      alertBox.classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
