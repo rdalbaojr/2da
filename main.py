@@ -13,6 +13,14 @@ app.include_router(registration.router)
 # ... rest of your imports ...
 
 # 1. Database Setup
+# User Database Model
+class User(Base):
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String, unique=True, index=True)
+    password = Column(String)
+    role = Column(String)  # 'passenger' or 'driver'
+    mobile = Column(String)
 DATABASE_URL = "sqlite:///./2da.db"
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
