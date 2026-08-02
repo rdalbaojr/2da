@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2DA - Register</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .register-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        p {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            text-align: left;
+            margin-bottom: 12px;
+        }
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #34495e;
+            margin-bottom: 4px;
+        }
+        input, select {
+            width: 100%;
+            padding: 9px 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        input:focus, select:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+        .checkbox-group {
+            text-align: left;
+            font-size: 13px;
+            color: #555;
+            margin: 15px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        .checkbox-group input {
+            width: auto;
+            margin-top: 3px;
+        }
+        button {
+            width: 100%;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 5px;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background-color: #219653;
+        }
+        .login-link {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-top: 20px;
+        }
+        .login-link a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="register-card">
+        <h2>Join 2DA</h2>
+        <p>Create your passenger or driver account</p>
+
+        <!-- Registration Form -->
+        <form action="/register" method="POST">
+            
+            <div class="input-group">
+                <label for="role">I want to register as:</label>
+                <select id="role" name="role" required>
+                    <option value="passenger">Passenger</option>
+                    <option value="driver">Tricycle Driver</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required placeholder="Choose a username">
+            </div>
+
+            <div class="input-group">
+                <label for="mobile">Mobile Number</label>
+                <input type="text" id="mobile" name="mobile" required placeholder="09XXXXXXXXX">
+            </div>
+
+            <div class="input-group">
+                <label for="otp">OTP Verification Code</label>
+                <input type="text" id="otp" name="otp" required placeholder="Enter 6-digit code">
+            </div>
+            
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required placeholder="Create a secure password">
+            </div>
+
+            <!-- Terms & Conditions Confirmation Checkbox -->
+            <div class="checkbox-group">
+                <input type="checkbox" id="terms" name="terms" required>
+                <label for="terms" style="font-weight: normal; font-size: 12px; color: #666;">
+                    I agree to the 2DA Terms of Service, Privacy Policy, and Code of Conduct for safe transport.
+                </label>
+            </div>
+
+            <button type="submit">Complete Registration</button>
+        </form>
+
+        <div class="login-link">
+            Already have an account? <a href="login.html">Log in here</a>
+        </div>
+    </div>
+
+</body>
+</html>
