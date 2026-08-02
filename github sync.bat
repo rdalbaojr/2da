@@ -1,26 +1,14 @@
 @echo off
-echo =========================================
-echo       Starting GitHub Auto-Update...
-echo =========================================
+echo Starting 2DA GitHub Sync...
 
-:: Ensure we are in the correct directory
-cd C:\Today.ph
-
-echo.
-echo [1/3] Staging all new and modified files...
+:: Add all changes (including new HTML files and python files)
 git add .
 
-echo.
-echo [2/3] Committing changes...
-:: This automatically uses the current date and time as the commit message
-git commit -m "Automated update on %date% at %time%"
+:: Commit with a dynamic timestamp message
+git commit -m "Automated update on %DATE% at %TIME%"
 
-echo.
-echo [3/3] Pushing to GitHub...
-git push
+:: Push to your main branch
+git push origin main
 
-echo.
-echo =========================================
-echo        GitHub Update Complete!
-echo =========================================
+echo Sync complete!
 pause
