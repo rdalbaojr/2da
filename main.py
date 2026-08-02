@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from fastapi import FastAPI, Depends
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy import create_engine, Column, Integer, String
+from fastapi.responses import RedirectResponse
 # ... rest of your imports ...
 
 # 1. Database Setup
@@ -39,7 +40,8 @@ app.mount("/web", StaticFiles(directory=".", html=True), name="web")
 # 5. API Endpoints
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to the 2DA API. The database is active!"}
+    # Force all new visitors to the login screen
+    return RedirectResponse(url="/web/login.html")
 # Dependency to get the database session
 def get_db():
     db = SessionLocal()
