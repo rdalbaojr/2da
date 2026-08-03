@@ -69,9 +69,6 @@
         <input type="text" id="pickup" required placeholder="Pick-up Location (Point A)" 
                class="w-full bg-slate-900/90 border border-slate-800 rounded-xl pl-10 pr-4 py-3.5 text-sm focus:outline-none focus:border-blue-500 transition-all">
       </div>
-      <div style="text-align: center; margin-top: 15px;">
-    	  <p>Don't have an account yet? <a href="register.html">Click here to register</a></p>
-      </div>
       <div class="relative">
         <div class="absolute left-4 top-4 text-rose-500"><i class="fa-solid fa-location-crosshairs"></i></div>
         <input type="text" id="dropoff" required placeholder="Drop-off Location (Point B)" 
@@ -100,16 +97,6 @@
       </button>
 
     </form>
-
-    <!-- Registration Prompt Message -->
-    <div id="registration-prompt" class="mt-7 text-center border-t border-slate-800/60 pt-5">
-      <p class="text-sm text-slate-400">
-        No account yet? 
-        <a href="/" class="text-blue-400 hover:text-blue-300 font-semibold transition-colors ml-1">
-          Please register to proceed <i class="fa-solid fa-arrow-right-to-bracket ml-1"></i>
-        </a>
-      </p>
-    </div>
 
     <!-- ==================== SEARCHING STATE (Hidden by default) ==================== -->
     <div id="searching-state" class="hidden flex flex-col items-center justify-center py-12 text-center">
@@ -155,7 +142,7 @@
         <button class="py-3 bg-slate-800 hover:bg-slate-700 text-white text-sm font-bold rounded-xl transition-all border border-slate-700">
           <i class="fa-regular fa-comment-dots mr-2"></i> Message
         </button>
-        <button class="py-3 bg-rose-600/20 hover:bg-rose-600 text-rose-500 hover:text-white border border-rose-500/30 hover:border-rose-600 text-sm font-bold rounded-xl transition-all">
+        <button onclick="window.location.reload()" class="py-3 bg-rose-600/20 hover:bg-rose-600 text-rose-500 hover:text-white border border-rose-500/30 hover:border-rose-600 text-sm font-bold rounded-xl transition-all">
           Cancel Ride
         </button>
       </div>
@@ -221,31 +208,58 @@
     });
 
     // -------------------------------------------------------------
-    // HANDLE CONFIRM BUTTON CLICK
+    // HANDLE CONFIRM BUTTON CLICK & SEND TO DATABASE
     // -------------------------------------------------------------
-    document.getElementById('confirm-btn').addEventListener('click', function(event) {
+    document.getElementById('confirm-btn').addEventListener('click', async function(event) {
       event.preventDefault();
 
-      // Hide the booking form elements and registration prompt
+      const pickupLocation = document.getElementById('pickup').value;
+      const dropoffLocation = document.getElementById('dropoff').value;
+
+      // Hide the booking form elements
       document.getElementById('booking-form').classList.add('hidden');
       document.querySelector('label[class*="Select Transaction"]').classList.add('hidden');
       document.querySelector('.grid.grid-cols-2').classList.add('hidden'); 
-      document.getElementById('registration-prompt').classList.add('hidden');
       
       // Show the "Searching" animation
       const searchingState = document.getElementById('searching-state');
       searchingState.classList.remove('hidden');
 
-      // Simulate finding a driver
-      setTimeout(() => {
-        searchingState.classList.add('hidden');
-        const driverFoundState = document.getElementById('driver-found-state');
-        driverFoundState.classList.remove('hidden');
-      }, 3500); 
+      // 1. Prepare data for the FastAPI backend
+      const requestData = {
+          passenger_name: "App User", // Placeholder until we link the logged-in session
+          pickup_location: pickupLocation,
+          dropoff_location: dropoffLocation
+      };
+
+      // 2. Send the data to your SQLite database
+      try {
+          const response = await fetch("/request-ride/", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(requestData)
+          });
+
+          if (response.ok) {
+              // 3. Simulate the delay of finding a driver before showing the QR code screen
+              setTimeout(() => {
+                searchingState.classList.add('hidden');
+                const driverFoundState = document.getElementById('driver-found-state');
+                driverFoundState.classList.remove('hidden');
+              }, 3500); 
+          } else {
+              alert("Error requesting ride from server.");
+              window.location.reload();
+          }
+      } catch (error) {
+          console.error("Error:", error);
+          alert("Network error.");
+          window.location.reload();
+      }
     });
 
     function logout() {
-      window.location.href = "/";
+      window.location.href = "/web/login.html";
     }
   </script>
 </body>

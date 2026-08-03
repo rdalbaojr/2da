@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2DA - Driver Dashboard</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            background-color: #f4f7f6; 
+            display: flex; 
+            justify-content: center; 
+            padding-top: 50px; 
+            margin: 0;
+        }
+        .card { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 10px; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+            width: 100%; 
+            max-width: 400px; 
+        }
+        h2 { 
+            text-align: center; 
+            color: #333; 
+            margin-bottom: 5px;
+        }
+        .status {
+            text-align: center;
+            color: #28a745;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .ride-request {
+            border: 1px solid #e1e1e1;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            margin-bottom: 15px;
+        }
+        .ride-request p {
+            margin: 5px 0;
+            color: #555;
+        }
+        .btn { 
+            background-color: #007bff; 
+            color: white; 
+            padding: 10px; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            width: 100%; 
+            font-size: 16px; 
+            margin-top: 10px;
+        }
+        .btn:hover { background-color: #0056b3; }
+        .btn-danger { background-color: #dc3545; margin-top: 20px; }
+        .btn-danger:hover { background-color: #c82333; }
+    </style>
+</head>
+<body>
+
+    <body>
+
+    <div class="card">
+        <h2>Tricycle Driver Portal</h2>
+        <div class="status">● Online and Ready</div>
+        
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+
+        <h3>Available Rides</h3>
+
+        <!-- This empty div is where our JavaScript will inject the real rides -->
+        <div id="rides-container">
+            <p style="text-align: center; color: #888;">Loading available rides...</p>
+        </div>
+
+        <a href="login.html" style="text-decoration: none;">
+            <button class="btn btn-danger">Log Out</button>
+        </a>
+    </div>
+
+    <!-- JavaScript to fetch data from FastAPI and render it -->
+    <script>
+        async function fetchRides() {
+            try {
+                // Call the new Python endpoint we just created
+                const response = await fetch('/api/rides');
+                const rides = await response.json();
+                
+                const container = document.getElementById('rides-container');
+                container.innerHTML = ''; // Clear the "Loading..." text
+
+                if (rides.length === 0) {
+                    container.innerHTML = '<p style="text-align: center; color: #888;">No rides available right now.</p>';
+                    return;
+                }
+
+                // Loop through the database records and create HTML for each one
+                rides.forEach(ride => {
+                    const rideBox = document.createElement('div');
+                    rideBox.className = 'ride-request';
+                    rideBox.innerHTML = `
+                        <p><strong>Passenger:</strong> ${ride.passenger_name}</p>
+                        <p><strong>Pickup:</strong> ${ride.pickup_location}</p>
+                        <p><strong>Dropoff:</strong> ${ride.dropoff_location}</p>
+                        <button class="btn" onclick="acceptRide(${ride.id})">Accept Ride #${ride.id}</button>
+                    `;
+                    container.appendChild(rideBox);
+                });
+
+            } catch (error) {
+                console.error("Error fetching rides:", error);
+                document.getElementById('rides-container').innerHTML = '<p style="color: red;">Error loading rides.</p>';
+            }
+        }
+
+        function acceptRide(rideId) {
+            alert("You accepted Ride #" + rideId + "!\n\n(We will build the database logic for this next!)");
+        }
+
+        // Run the fetch function as soon as the page loads
+        window.onload = fetchRides;
+    </script>
+
+</body>
+    </div>
+
+</body>
+</html>
