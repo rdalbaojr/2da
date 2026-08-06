@@ -1,3 +1,0 @@
-@echo off
-echo Opening Passenger Dashboard...
-start http://127.0.0.1:8000/web/passenger_dashboard.html
