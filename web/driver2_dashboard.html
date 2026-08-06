@@ -19,7 +19,7 @@
 </head>
 <body class="min-h-full text-slate-900 antialiased flex flex-col justify-center items-center py-10 px-4 relative bg-[#C87F37]">
 
-    <!-- ==================== QUICK NAV MENU ==================== -->
+    <!-- ==================== QUICK NAV MENU (Caramel Theme) ==================== -->
     <div style="position: fixed; top: 15px; left: 15px; z-index: 9999; font-family: 'Plus Jakarta Sans', sans-serif;">
         <button onclick="toggleQuickMenu()" style="background: #C87F37; color: white; border: 1px solid #a35c27; padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.2); outline: none; transition: 0.2s;">
             <i class="fa-solid fa-bars mr-1"></i> Menu
@@ -56,28 +56,13 @@
             </div>
         </div>
 
-        <!-- 🔴 KATODA Broadcast Feed Container -->
-        <div id="driver-broadcast-container" class="bg-[#F5E6D3] rounded-2xl p-4 mb-6 border border-amber-800 shadow-sm hidden">
-            <div class="flex items-start gap-3">
-                <div class="bg-amber-900 text-white w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
-                    <i class="fa-solid fa-bullhorn text-xs"></i>
-                </div>
-                <div>
-                    <h4 class="text-xs font-extrabold text-amber-950 uppercase tracking-wider">KATODA Official Broadcast</h4>
-                    <p id="driver-broadcast-text" class="text-xs font-semibold text-slate-900 mt-1 leading-relaxed"></p>
-                </div>
-            </div>
-        </div>
-
         <!-- Financial Summary Section -->
-        <div class="mt-4 bg-[#F5E6D3] rounded-2xl border border-[#d4aa7c] overflow-hidden shadow-md">
+        <div class="mt-8 bg-[#F5E6D3] rounded-2xl border border-[#d4aa7c] overflow-hidden shadow-md">
             <div class="p-4 bg-[#e8cda8] border-b border-[#d4aa7c] flex justify-between items-center">
                 <h2 class="text-lg font-bold text-amber-950 flex items-center gap-2">
                     <i class="fa-solid fa-file-invoice-dollar text-amber-800"></i> Daily Shift Report
                 </h2>
-                <button onclick="loadDashboardRides()" class="text-xs font-bold bg-green-800/10 hover:bg-green-800/20 text-green-800 px-3 py-1.5 rounded-full border border-green-800/20 transition cursor-pointer flex items-center gap-1 shadow-sm">
-                    <i class="fa-solid fa-arrows-rotate"></i> Live Sync
-                </button>
+                <span class="text-xs font-bold bg-green-800/10 text-green-800 px-3 py-1 rounded-full border border-green-800/20">Live Sync</span>
             </div>
             
             <div class="overflow-x-auto">
@@ -91,9 +76,14 @@
                     </thead>
                     <tbody class="divide-y divide-[#d4aa7c]/50 font-medium bg-[#F5E6D3]">
                         <tr class="hover:bg-[#e8cda8]/50 transition">
-                            <td class="px-4 py-2.5">Pasundo</td>
-                            <td id="qty-pasundo" class="px-4 py-2.5 text-center">0</td>
-                            <td id="amt-pasundo" class="px-4 py-2.5 text-right font-bold text-slate-900">0.00</td>
+                            <td class="px-4 py-2.5">Passenger</td>
+                            <td id="qty-passenger" class="px-4 py-2.5 text-center">0</td>
+                            <td id="amt-passenger" class="px-4 py-2.5 text-right font-bold text-slate-900">0.00</td>
+                        </tr>
+                        <tr class="hover:bg-[#e8cda8]/50 transition">
+                            <td class="px-4 py-2.5">With Baggage</td>
+                            <td id="qty-baggage" class="px-4 py-2.5 text-center">0</td>
+                            <td id="amt-baggage" class="px-4 py-2.5 text-right font-bold text-slate-900">0.00</td>
                         </tr>
                         <tr class="hover:bg-[#e8cda8]/50 transition">
                             <td class="px-4 py-2.5">Pabili</td>
@@ -101,24 +91,28 @@
                             <td id="amt-pabili" class="px-4 py-2.5 text-right font-bold text-slate-900">0.00</td>
                         </tr>
                         <tr class="hover:bg-[#e8cda8]/50 transition">
-                            <td class="px-4 py-2.5">Papickup/Deliver</td>
-                            <td id="qty-deliver" class="px-4 py-2.5 text-center">0</td>
-                            <td id="amt-deliver" class="px-4 py-2.5 text-right font-bold text-slate-900">0.00</td>
+                            <td class="px-4 py-2.5">Courier</td>
+                            <td id="qty-courier" class="px-4 py-2.5 text-center">0</td>
+                            <td id="amt-courier" class="px-4 py-2.5 text-right font-bold text-slate-900">0.00</td>
                         </tr>
                     </tbody>
                     <tfoot class="bg-[#e8cda8] border-t border-[#d4aa7c] font-bold">
+                        <!-- Gross Total -->
                         <tr>
                             <td colspan="2" class="px-4 py-2 text-right text-amber-900 text-xs uppercase tracking-wider">Gross Total:</td>
                             <td id="amt-gross" class="px-4 py-2 text-right text-slate-900">₱0.00</td>
                         </tr>
+                        <!-- Platform Deduction (17%) -->
                         <tr class="text-rose-700">
-                            <td colspan="2" id="label-platform" class="px-4 py-1 text-right text-xs tracking-wider">Platform (17%):</td>
+                            <td colspan="2" class="px-4 py-1 text-right text-xs tracking-wider">Platform (17%):</td>
                             <td id="amt-platform" class="px-4 py-1 text-right">- ₱0.00</td>
                         </tr>
+                        <!-- KATODA Deduction (3%) -->
                         <tr class="text-rose-700">
-                            <td colspan="2" id="label-katoda" class="px-4 py-1 text-right text-xs tracking-wider">KATODA (3%):</td>
+                            <td colspan="2" class="px-4 py-1 text-right text-xs tracking-wider">KATODA (3%):</td>
                             <td id="amt-katoda" class="px-4 py-1 text-right">- ₱0.00</td>
                         </tr>
+                        <!-- Net Driver Earnings (80%) -->
                         <tr class="bg-green-900 text-white border-t border-green-800">
                             <td colspan="2" class="px-4 py-3 text-right text-green-100 text-sm uppercase tracking-wider">Net Earnings:</td>
                             <td id="amt-net" class="px-4 py-3 text-right font-extrabold text-lg">₱0.00</td>
@@ -146,34 +140,6 @@
         <a href="login.html" onclick="logout()" class="block w-full text-center bg-red-900/10 hover:bg-red-900/20 border border-red-800/30 text-red-700 py-3 rounded-xl text-sm font-bold transition">
             <i class="fa-solid fa-power-off mr-1"></i> Log Out
         </a>
-    </div> <!-- END Main Dashboard Container -->
-
-    <!-- ==================== IN-APP CHAT MODAL ==================== -->
-    <div id="chat-modal" class="hidden fixed inset-0 bg-black/60 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4 transition-opacity">
-        <div class="bg-[#F5E6D3] w-full max-w-md h-[70vh] sm:h-[500px] sm:rounded-2xl flex flex-col overflow-hidden shadow-2xl relative rounded-t-3xl">
-            <!-- Chat Header -->
-            <div class="bg-[#175d33] px-5 py-4 flex justify-between items-center text-white shadow-md z-10">
-                <h3 class="font-bold flex items-center gap-2 text-lg">
-                    <i class="fa-regular fa-comment-dots"></i> 2DA Secure Chat
-                </h3>
-                <button onclick="closeChat()" class="text-white/80 hover:text-white bg-white/10 w-8 h-8 rounded-full flex justify-center items-center transition">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-
-            <!-- Chat Messages Area -->
-            <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3 flex flex-col">
-                <div class="text-center text-xs text-amber-900/50 font-bold mb-2">Chat started. Messages are strictly private.</div>
-            </div>
-
-            <!-- Type Message Area -->
-            <div class="bg-white p-3 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] flex gap-2 items-center">
-                <input type="text" id="chat-input" onkeypress="handleEnter(event)" class="flex-1 bg-gray-100 border-none rounded-full px-5 py-3 text-sm outline-none focus:ring-2 focus:ring-[#175d33] transition" placeholder="Type a message...">
-                <button onclick="sendMessage()" class="bg-[#175d33] text-white w-11 h-11 rounded-full flex justify-center items-center shadow-md hover:bg-[#114626] transition shrink-0">
-                    <i class="fa-solid fa-paper-plane"></i>
-                </button>
-            </div>
-        </div>
     </div>
 
     <script>
@@ -207,28 +173,7 @@
         document.addEventListener("DOMContentLoaded", () => {
             const driverName = getCookie("driver_name") !== "Unknown Driver" ? getCookie("driver_name") : getCookie("passenger_name"); 
             document.getElementById("driver-welcome-name").innerText = `${driverName}`;
-            checkDriverBroadcasts();
         });
-
-        // --- Polling for Broadcasts ---
-        async function checkDriverBroadcasts() {
-            try {
-                const response = await fetch('/api/driver/broadcast');
-                const data = await response.json();
-                
-                const container = document.getElementById('driver-broadcast-container');
-                const textElement = document.getElementById('driver-broadcast-text');
-
-                if (data && data.message && data.message.trim() !== "") {
-                    textElement.innerText = data.message;
-                    container.classList.remove('hidden');
-                } else {
-                    container.classList.add('hidden');
-                }
-            } catch (error) {
-                console.error("Error fetching broadcast:", error);
-            }
-        }
 
         // ==========================================
         // MASTER FUNCTION: Fetch Pending & Active Rides
@@ -298,11 +243,14 @@
                         if (ride.status === 'accepted') {
                             actionButtonHtml = `<button onclick="completeRide(${ride.id})" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-3 rounded-xl text-sm font-bold transition shadow-md shadow-blue-900/20"><i class="fa-solid fa-location-dot mr-1"></i> Arrived & Complete</button>`;
                         } else if (ride.status === 'completed') {
+                            // --- BPI QR DISPLAY LOGIC ---
                             actionButtonHtml = `
                                 <div class="bg-white border-2 border-dashed border-green-700/50 rounded-xl p-4 mb-4 text-center">
                                     <p class="text-green-800 font-bold text-sm mb-3"><i class="fa-solid fa-qrcode mr-1"></i> Scan to Pay via BPI</p>
+                                    
                                     <img src="bpi-qr.png" alt="BPI QR Code" class="w-36 h-36 mx-auto rounded-lg shadow-sm border border-slate-200 object-cover" />
                                 </div>
+                                
                                 <button onclick="confirmPayment(${ride.id})" class="w-full bg-green-800 hover:bg-green-700 text-white py-3 rounded-xl text-sm font-bold transition shadow-md shadow-green-900/20">
                                     <i class="fa-solid fa-check-double mr-1"></i> Confirm Payment
                                 </button>
@@ -318,15 +266,19 @@
                                 <span class="text-slate-900 font-extrabold text-lg">${ride.fare}</span>
                             </div>
                             
-                            <!-- CALL AND CHAT BUTTONS HERE -->
-                            <div class="flex gap-3 mb-4 mt-2">
-                                <a href="tel:${waPassNumber}" class="flex-1 bg-white border border-amber-900 text-amber-900 py-2.5 rounded-lg font-bold flex justify-center items-center gap-2 shadow-sm hover:bg-amber-50 transition text-sm">
-                                    <i class="fa-solid fa-phone"></i> Call
+                            <div class="bg-white/60 rounded-lg p-3 mb-4 border border-[#d4aa7c]">
+                                <p class="text-slate-800 text-sm mb-2 font-medium"><i class="fa-solid fa-user text-amber-700 mr-2 w-4"></i> ${passengerFirstName}</p>
+                                <p class="text-slate-800 text-sm mb-2 font-medium"><i class="fa-solid fa-location-dot text-rose-600 mr-2 w-4"></i> <strong>Pick-up:</strong> ${ride.pickup_location}</p>
+                                <p class="text-slate-800 text-sm font-medium"><i class="fa-solid fa-flag-checkered text-blue-600 mr-2 w-4"></i> <strong>Drop-off:</strong> ${ride.dropoff_location}</p>
+                            </div>
+
+                            <div class="flex gap-2 mb-4">
+                                <a href="tel:${passMobile}" class="flex-1 text-center bg-white border border-[#d4aa7c] hover:bg-slate-50 text-slate-900 py-2.5 rounded-lg text-sm font-bold transition">
+                                    <i class="fa-solid fa-phone mr-1"></i> Call
                                 </a>
-                                
-                                <button onclick="openChat(${ride.id})" class="flex-1 bg-[#175d33] text-white py-2.5 rounded-lg font-bold flex justify-center items-center gap-2 shadow-sm hover:bg-[#114626] transition text-sm">
-                                    <i class="fa-regular fa-comment-dots"></i> Chat
-                                </button>
+                                <a href="https://wa.me/${waPassNumber}" target="_blank" class="flex-1 text-center bg-green-800 hover:bg-green-700 text-white py-2.5 rounded-lg text-sm font-bold transition">
+                                    <i class="fa-brands fa-whatsapp mr-1"></i> Chat
+                                </a>
                             </div>
 
                             ${actionButtonHtml}
@@ -339,12 +291,9 @@
             }
         }
 
-        // Start polling for rides and broadcasts every 3 seconds
+        // Start polling
         loadDashboardRides();
-        setInterval(() => {
-            loadDashboardRides();
-            checkDriverBroadcasts();
-        }, 3000); 
+        setInterval(loadDashboardRides, 3000); 
 
         // ==========================================
         // Action Functions
@@ -386,131 +335,62 @@
             }
         }
 
-        // ==========================================
-        // DYNAMIC ADMIN SETTINGS INJECTION
-        // ==========================================
-        async function updateEarningsTable(allRides, driverName) {
-            let config = { pasundo_price: 50, pabili_price: 50, deliver_price: 50, platform_share: 17, katoda_share: 3 };
-            try {
-                const res = await fetch('/api/admin/config');
-                if (res.ok) {
-                    config = await res.json();
-                }
-            } catch (error) {
-                console.log("Could not fetch admin config, using defaults.");
-            }
-
-            const platformPct = config.platform_share;
-            const katodaPct = config.katoda_share;
-
-            document.getElementById('label-platform').innerText = `Platform (${platformPct}%):`;
-            document.getElementById('label-katoda').innerText = `KATODA (${katodaPct}%):`;
-
+        function updateEarningsTable(allRides, driverName) {
             let data = {
-                pasundo: { qty: 0 },
-                pabili: { qty: 0 },
-                deliver: { qty: 0 }
+                passenger: { qty: 0, amt: 0 },
+                baggage: { qty: 0, amt: 0 },
+                pabili: { qty: 0, amt: 0 },
+                courier: { qty: 0, amt: 0 },
+                grossTotal: 0
             };
 
             const completedRides = allRides.filter(ride => 
-                (ride.status === 'paid' || ride.status === 'completed') && ride.driver_name === driverName
+                ride.status === 'completed' && ride.driver_name === driverName
             );
 
             completedRides.forEach(ride => {
-                const service = (ride.service_type || 'pasundo').toLowerCase();
-                if (service.includes('pasundo')) data.pasundo.qty++;
-                else if (service.includes('pabili')) data.pabili.qty++;
-                else if (service.includes('deliver') || service.includes('papickup')) data.deliver.qty++;
-                else data.pasundo.qty++; // fallback
+                let fareVal = parseFloat(String(ride.fare).replace(/[^0-9.-]+/g,""));
+                if (isNaN(fareVal)) fareVal = 0;
+
+                const service = (ride.service_type || 'passenger').toLowerCase();
+
+                if (service === 'passenger') {
+                    data.passenger.qty++;
+                    data.passenger.amt += fareVal;
+                } else if (service === 'baggage') {
+                    data.baggage.qty++;
+                    data.baggage.amt += fareVal;
+                } else if (service === 'pabili') {
+                    data.pabili.qty++;
+                    data.pabili.amt += fareVal;
+                } else if (service === 'courier') {
+                    data.courier.qty++;
+                    data.courier.amt += fareVal;
+                }
+
+                data.grossTotal += fareVal;
             });
 
-            const pasundoBase = data.pasundo.qty * config.pasundo_price;
-            const pabiliBase = data.pabili.qty * config.pabili_price;
-            const deliverBase = data.deliver.qty * config.deliver_price;
+            const platformCut = data.grossTotal * 0.17;
+            const katodaCut = data.grossTotal * 0.03;
+            const netEarnings = data.grossTotal - platformCut - katodaCut;
 
-            const totalBase = pasundoBase + pabiliBase + deliverBase;
-
-            const platformCut = totalBase * (platformPct / 100);
-            const katodaCut = totalBase * (katodaPct / 100);
+            document.getElementById('qty-passenger').innerText = data.passenger.qty;
+            document.getElementById('amt-passenger').innerText = data.passenger.amt.toFixed(2);
             
-            const grossTotal = totalBase + platformCut + katodaCut;
-            const netEarnings = totalBase;
+            document.getElementById('qty-baggage').innerText = data.baggage.qty;
+            document.getElementById('amt-baggage').innerText = data.baggage.amt.toFixed(2);
 
-            const multiplier = 1 + ((platformPct + katodaPct) / 100);
-            const pasundoGross = pasundoBase * multiplier;
-            const pabiliGross = pabiliBase * multiplier;
-            const deliverGross = deliverBase * multiplier;
-
-            document.getElementById('qty-pasundo').innerText = data.pasundo.qty;
-            document.getElementById('amt-pasundo').innerText = pasundoGross.toFixed(2);
-            
             document.getElementById('qty-pabili').innerText = data.pabili.qty;
-            document.getElementById('amt-pabili').innerText = pabiliGross.toFixed(2);
+            document.getElementById('amt-pabili').innerText = data.pabili.amt.toFixed(2);
 
-            document.getElementById('qty-deliver').innerText = data.deliver.qty;
-            document.getElementById('amt-deliver').innerText = deliverGross.toFixed(2);
+            document.getElementById('qty-courier').innerText = data.courier.qty;
+            document.getElementById('amt-courier').innerText = data.courier.amt.toFixed(2);
 
-            document.getElementById('amt-gross').innerText = "₱" + grossTotal.toFixed(2);
+            document.getElementById('amt-gross').innerText = "₱" + data.grossTotal.toFixed(2);
             document.getElementById('amt-platform').innerText = "- ₱" + platformCut.toFixed(2);
             document.getElementById('amt-katoda').innerText = "- ₱" + katodaCut.toFixed(2);
             document.getElementById('amt-net').innerText = "₱" + netEarnings.toFixed(2);
-        }
-
-        // ==========================================
-        // WEBSOCKET CHAT LOGIC
-        // ==========================================
-        let chatSocket = null;
-        let currentChatUser = getCookie('driver_name') !== "Unknown Driver" ? getCookie('driver_name') : 'Driver';
-
-        function openChat(rideId) {
-            document.getElementById('chat-modal').classList.remove('hidden');
-            document.getElementById('chat-messages').innerHTML = '<div class="text-center text-xs text-amber-900/50 font-bold mb-2">Chat started. Messages are strictly private.</div>';
-            
-            const wsUrl = `ws://${window.location.host}/ws/chat/${rideId}`;
-            chatSocket = new WebSocket(wsUrl);
-            
-            chatSocket.onmessage = function(event) {
-                const data = JSON.parse(event.data);
-                displayMessage(data.sender, data.text);
-            };
-        }
-
-        function closeChat() {
-            document.getElementById('chat-modal').classList.add('hidden');
-            if(chatSocket) chatSocket.close();
-        }
-
-        function handleEnter(event) {
-            if(event.key === 'Enter') sendMessage();
-        }
-
-        function sendMessage() {
-            const input = document.getElementById('chat-input');
-            const messageText = input.value.trim();
-            
-            if (messageText !== '' && chatSocket) {
-                const payload = { sender: currentChatUser, text: messageText };
-                chatSocket.send(JSON.stringify(payload));
-                input.value = ''; 
-            }
-        }
-
-        function displayMessage(sender, text) {
-            const messageContainer = document.getElementById('chat-messages');
-            const isMe = sender === currentChatUser;
-            
-            const alignClass = isMe ? 'self-end' : 'self-start';
-            const bubbleStyle = isMe ? 'bg-[#175d33] text-white rounded-br-none' : 'bg-white border border-[#d4aa7c] text-slate-800 rounded-bl-none';
-            
-            const messageHTML = `
-                <div class="flex flex-col ${alignClass} max-w-[80%]">
-                    ${!isMe ? `<span class="text-[10px] font-bold text-amber-900 mb-1 ml-1">${sender}</span>` : ''}
-                    <div class="px-4 py-2.5 rounded-2xl shadow-sm text-sm ${bubbleStyle}">${text}</div>
-                </div>
-            `;
-            
-            messageContainer.innerHTML += messageHTML;
-            messageContainer.scrollTop = messageContainer.scrollHeight;
         }
     </script>
 </body>
